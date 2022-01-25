@@ -157,6 +157,7 @@ if __name__ == "__main__":
     parser = pl.Trainer.add_argparse_args(parent_parser=parser)
     parser = ResNet.add_model_specific_args(parent_parser=parser)
 
+    mlflow.set_tracking_uri("sqlite:///database/mlruns.db")
     mlflow.pytorch.autolog()
 
     args = parser.parse_args()
