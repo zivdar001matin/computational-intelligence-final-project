@@ -41,7 +41,7 @@ class ImageClassificationBase(pl.LightningModule):
             help="number of workers (default: 4)",
         )
         parser.add_argument(
-            "--lr",
+            "--learning_rate",
             type=float,
             default=0.01,
             metavar="LR",

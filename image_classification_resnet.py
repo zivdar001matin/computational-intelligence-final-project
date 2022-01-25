@@ -84,7 +84,7 @@ class ResNet(ImageClassificationBase):
         :return: output - Initialized optimizer and scheduler
         """
         # Set up cutom optimizer with weight decay
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=self.args["lr"], weight_decay=self.args["weight_decay"])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=self.args["learning_rate"], weight_decay=self.args["weight_decay"])
 
         # one cycle learning rate scheduler
         # update learning rate batch by batch
