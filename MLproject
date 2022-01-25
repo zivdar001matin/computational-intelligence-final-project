@@ -1,0 +1,26 @@
+name: persian-car-classifier
+
+# conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      max_epochs      : {type: int, default: 20}
+      batch_size      : {type: int, default: 128}
+      num_workers     : {type: int, default: 4}
+      learning_rate   : {type: float, default: 0.01}
+      validation_ratio: {type: float, default: 0.1}
+      test_ratio      : {type: float, default: 0.1}
+      grad_clip       : {type: float, default: 0.1}
+      weight_decay    : {type: float, default: 1e-4}
+
+    command: |
+          python image_classification_resnet.py \
+            --max_epochs {max_epochs} \
+            --batch_size {batch_size} \
+            --num_workers {num_workers} \
+            --lr {learning_rate} \
+            --validation_ratio {validation_ratio} \
+            --test_ratio {test_ratio} \
+            --grad_clip {grad_clip} \
+            --weight_decay {weight_decay}
