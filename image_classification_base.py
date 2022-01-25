@@ -82,8 +82,7 @@ class ImageClassificationBase(pl.LightningModule):
         Initializes the loss function
         :return: output - Initialized cross entropy loss function
         """
-        return F.nll_loss(logits, labels)
-        # return F.cross_entropy(logits, labels)
+        return F.cross_entropy(logits, labels)
     
     def training_step(self, train_batch, batch_idx):
         """
