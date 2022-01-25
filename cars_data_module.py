@@ -39,7 +39,7 @@ class CarsDataModule(pl.LightningDataModule):
         # download dataset if it's needed!
         pass
 
-    def setup(self):
+    def setup(self, stage=None):
         full_dataset = ImageFolder(self.data_dir, transform=self.transform)
         all_data_size = len(full_dataset)
         test_size       = int(all_data_size * self.test_ratio)
@@ -69,7 +69,7 @@ class CarsDataModule(pl.LightningDataModule):
                                num_workers=self.num_workers,
                                pin_memory=True)
 
-    def teardown(self):
+    def teardown(self, stage=None):
         # Used to clean-up when the run is finished
         pass
 
