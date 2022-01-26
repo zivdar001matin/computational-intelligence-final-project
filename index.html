@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>File Upload</title>
+
+    <style type="text/css">
+      body {
+        margin: 0 auto;
+        max-width: 40em;
+        width: 88%;
+      }
+
+      label,
+      input {
+        display: block;
+        width: 100%;
+      }
+
+      input {
+        margin-bottom: 1em;
+      }
+
+      #app {
+        margin-bottom: 1em;
+      }
+
+      img {
+        height: auto;
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>File Upload</h1>
+
+    <div id="app"></div>
+
+    <form id="upload">
+      <label for="file">File to upload</label>
+      <input type="file" id="file" accept="image/*" />
+
+      <button>Upload</button>
+    </form>
+
+    <script>
+      const server = "http://httpbin.org/post";
+      // Get the form and file field
+      let form = document.querySelector("#upload");
+      let file = document.querySelector("#file");
+      let app = document.querySelector("#app");
+
+      /**
+       * Log the uploaded file to the console
+       * @param {event} Event The file loaded event
+       */
+      function logFile(event) {
+        let str = event.target.result;
+        let img = document.createElement("img");
+        img.src = str;
+        app.append(img);
+        //console.log(str);
+      }
+
+      function upload(file) {
+        fetch(server, {
+          // Your POST endpoint
+          method: "POST",
+          headers: {
+            "Content-Type": "",
+          },
+          body: file, // This is your file object
+        })
+          .then(
+            (response) => response.json() // if the response is a JSON object
+          )
+          .then((success) => {
+            const res = success.result || "error";
+            console.log(res);
+            const elem = document.createElement("p");
+            elem.innerHTML = res;
+            app.appendChild(elem);
+          })
+          .catch(
+            (error) => console.log(error) // Handle the error response object
+          );
+      }
+
+      /**
+       * Handle submit events
+       * @param  {Event} event The event object
+       */
+      function handleSubmit(event) {
+        // Stop the form from reloading the page
+        event.preventDefault();
+
+        // If there's no file, do nothing
+        if (!file.value.length) return;
+
+        // Create a new FileReader() object
+        let reader = new FileReader();
+
+        // Setup the callback event to run when the file is read
+        reader.onload = logFile;
+
+        // Read the file
+        reader.readAsDataURL(file.files[0]);
+        upload(file.files[0]);
+      }
+
+      // Listen for submit events
+      form.addEventListener("submit", handleSubmit);
+    </script>
+  </body>
+</html>
