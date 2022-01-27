@@ -69,6 +69,21 @@ class CarsDataModule(pl.LightningDataModule):
                                num_workers=self.num_workers,
                                pin_memory=True)
 
+    @staticmethod
+    def number_to_label(num):
+        """
+        Convert categorical number to represented string value.
+        """
+        labels_dict = {
+            0: '206',
+            1: 'dena',
+            2: 'pars',
+            3: 'pride',
+            4: 'samand',
+            5: 'tiba'
+        }
+        return labels_dict[num]
+
     def teardown(self, stage=None):
         # Used to clean-up when the run is finished
         pass
