@@ -127,7 +127,7 @@ class ResNet(ImageClassificationBase):
 
         for epoch in range(self.args["epochs"]):
             # actually train the mode in this epochs
-            model.train()
+            self.train()
             train_losses = []
             for batch in dm.train_dataloader():
                 loss = self.training_step(batch)
@@ -135,7 +135,7 @@ class ResNet(ImageClassificationBase):
                 loss.backward()
 
                 # gradient clipping
-                nn.utils.clip_grad_value_(model.parameters(), self.args["grad_clip"])
+                nn.utils.clip_grad_value_(self.parameters(), self.args["grad_clip"])
 
                 self.optimizer.step()
                 self.optimizer.zero_grad()
