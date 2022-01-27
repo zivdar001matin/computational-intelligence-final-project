@@ -8,6 +8,17 @@ from torchvision.datasets import ImageFolder
 
 
 class CarsDataModule(pl.LightningDataModule):
+
+    @staticmethod
+    def get_transform():
+        transform = transforms.Compose([
+                transforms.Resize(64),
+                transforms.CenterCrop(64),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ])
+        return transform
+
     def __init__(self,  data_dir:str = 'dataset/', batch_size:int = 32,
                         num_workers:int = 2, validation_ratio:int = 0.1,
                         test_ratio:int = 0.1, **kwargs):
@@ -28,12 +39,7 @@ class CarsDataModule(pl.LightningDataModule):
         # transforms for images
         # Data augmentation and normalization for training
         # Just normalization for validation
-        self.transform = transforms.Compose([
-                transforms.Resize(64),
-                transforms.CenterCrop(64),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+        self.transform = self.get_transform()
 
     def prepare_data(self):
         # download dataset if it's needed!
