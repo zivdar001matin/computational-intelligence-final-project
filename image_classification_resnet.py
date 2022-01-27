@@ -2,6 +2,9 @@ from image_classification_base import ImageClassificationBase
 from cars_data_module import CarsDataModule
 
 import mlflow.pytorch
+from mlflow.models.signature import infer_signature
+from PIL import Image
+
 import os
 from argparse import ArgumentParser
 
@@ -150,6 +153,21 @@ class ResNet(ImageClassificationBase):
             history.append(result)
         return history
 
+    def predict(self, df):
+        # Convert np.array to PIL
+        df['images'] = df['images'].apply(lambda x: Image.fromarray(np.uint8(x)))
+        # Tranform images to give to model
+        forward_transforms = CarsDataModule.get_transform()
+        df['images'] = df['images'].apply(lambda x: forward_transforms(x))
+        # Stack dataframe images into one tensor
+        xb = torch.stack([df['images'][x] for x in range(len(df['images']))])
+        # Call forward function to predict using model
+        logits = self.forward(xb)
+        predicted_df = pd.DataFrame({
+            'predict': logits.argmax(dim=1).numpy()
+        })
+        predicted_names = predicted_df['predict'].apply(lambda x: CarsDataModule.number_to_label(x))
+        return predicted_names
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="PyTorch Autolog Persian Cars Classifier")
